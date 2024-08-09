@@ -1,0 +1,29 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    transition: background-color 5s ease; /* Transição suave para mudança de cor */
+}
+
+#content {
+    text-align: center;
+}
+
+.blurred-box {
+    width: 1000px;
+    height: 850px;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 0.5px solid black; /* Borda inicial */
+    backdrop-filter: blur(10px); /* Desfoque de fundo */
+    transition: background-color 0.5s ease; /* Transição suave para a mudança de cor */
+}
