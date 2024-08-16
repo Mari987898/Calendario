@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Altera a cor a cada 2 segundos (2000 milissegundos)
-    setInterval(changeBackgroundColor, 2000);
+    setInterval(changeBackgroundColor, 1500);
 
     // Código existente para aumentar a opacidade
     let currentOpacity = 0; // Começa com opacidade 0 (totalmente transparente)
@@ -26,7 +26,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const monthYearLabel = document.getElementById('monthYear');
     const daysOfWeekContainer = document.getElementById('daysOfWeek');
     const daysContainer = document.getElementById('days');
-    const weekdays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+    const calendar = document.getElementById('calendar') // div calendar:
+    const weekdays = ['Domingo','Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'] //array with weekdays:
     
     let currentYear = new Date().getFullYear();
     let currentMonth = new Date().getMonth();
@@ -40,7 +41,13 @@ document.addEventListener("DOMContentLoaded", function() {
         const startDay = firstDay.getDay();
 
         // Atualiza o rótulo do mês e ano
-        monthYearLabel.textContent = `${firstDay.toLocaleString('pt-BR', { month: 'long' })} ${year}`;
+        const monthNames = [
+            "Janeiro, ", "Fevereiro, ", "Março, ", "Abril, ", "Maio, ", "Junho, ", 
+            "Julho, ", "Agosto, ", "Setembro, ", "Outubro, ", "Novembro, ", "Dezembro, "
+        ];
+        
+        monthYearLabel.textContent = `${monthNames[month]} ${year}`;
+        
 
         // Limpa os containers
         daysOfWeekContainer.innerHTML = '';
