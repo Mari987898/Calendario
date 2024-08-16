@@ -21,52 +21,17 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         square.style.backgroundColor = `rgba(0, 0, 255, ${currentOpacity})`; // Define a nova cor com opacidade
     }
-
-    // Modal
-    const noteModal = document.getElementById('noteModal');
-    const closeModal = document.querySelector('.close');
-    const saveNoteButton = document.getElementById('saveNote');
-    const noteText = document.getElementById('noteText');
-    const noteDate = document.getElementById('noteDate');
-
-    let selectedDay = null;
-
-    function openModal(day) {
-        selectedDay = day;
-        noteDate.textContent = `Anotação para o dia ${day}`;
-        noteText.value = localStorage.getItem(`note-${day}`) || '';
-        noteModal.style.display = 'block';
-    }
-
-    function closeModalFunction() {
-        noteModal.style.display = 'none';
-    }
-
-    closeModal.addEventListener('click', closeModalFunction);
-    window.addEventListener('click', function(event) {
-        if (event.target === noteModal) {
-            closeModalFunction();
-        }
-    });
-
-    saveNoteButton.addEventListener('click', function() {
-        if (selectedDay) {
-            localStorage.setItem(`note-${selectedDay}`, noteText.value);
-            closeModalFunction();
-        }
-    });
-
-    // Adiciona os dias ao calendário
     const prevMonthButton = document.getElementById('prevMonth');
     const nextMonthButton = document.getElementById('nextMonth');
     const monthYearLabel = document.getElementById('monthYear');
     const daysOfWeekContainer = document.getElementById('daysOfWeek');
     const daysContainer = document.getElementById('days');
-
+    const weekdays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+    
     let currentYear = new Date().getFullYear();
     let currentMonth = new Date().getMonth();
 
-    const dayNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+    let events = localStorage.getItem('events') ? JSON.parse(localStorage.getItem('events')) : [];
 
     function renderCalendar(year, month) {
         const firstDay = new Date(year, month, 1);
@@ -75,14 +40,14 @@ document.addEventListener("DOMContentLoaded", function() {
         const startDay = firstDay.getDay();
 
         // Atualiza o rótulo do mês e ano
-        monthYearLabel.textContent = `${month + 1}/${year}`;
+        monthYearLabel.textContent = `${firstDay.toLocaleString('pt-BR', { month: 'long' })} ${year}`;
 
         // Limpa os containers
         daysOfWeekContainer.innerHTML = '';
         daysContainer.innerHTML = '';
 
         // Cria os cabeçalhos dos dias da semana
-        dayNames.forEach(dayName => {
+        weekdays.forEach(dayName => {
             const dayElement = document.createElement('div');
             dayElement.classList.add('day');
             dayElement.textContent = dayName;
@@ -92,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Adiciona os dias vazios antes do início do mês
         for (let i = 0; i < startDay; i++) {
             const emptyDay = document.createElement('div');
-            emptyDay.classList.add('day', 'empty');
+            emptyDay.classList.add('day');
             daysContainer.appendChild(emptyDay);
         }
 
@@ -101,31 +66,93 @@ document.addEventListener("DOMContentLoaded", function() {
             const dayElement = document.createElement('div');
             dayElement.classList.add('day');
             dayElement.textContent = day;
-            dayElement.addEventListener('click', () => openModal(day));
+            const dayString = `${year}-${month + 1}-${day}`;
+
+            const eventDay = events.find(event => event.date === dayString);
+            if (eventDay) {
+                const eventDiv = document.createElement('div');
+                eventDiv.classList.add('event');
+                eventDiv.innerText = eventDay.title;
+                dayElement.appendChild(eventDiv);
+            }
+
+            if (day === new Date().getDate() && year === new Date().getFullYear() && month === new Date().getMonth()) {
+                dayElement.setAttribute('id', 'currentDay');
+            }
+
+            dayElement.addEventListener('click', () => openModal(dayString));
             daysContainer.appendChild(dayElement);
         }
     }
 
+    function openModal(date) {
+        const existingEvent = events.find(event => event.date === date);
+        const newEventModal = document.getElementById('newEventModal');
+        const deleteEventModal = document.getElementById('deleteEventModal');
+        const eventText = document.getElementById('eventText');
+        const eventTitleInput = document.getElementById('eventTitleInput');
+
+        document.getElementById('modalBackDrop').style.display = 'block';
+
+        if (existingEvent) {
+            deleteEventModal.style.display = 'block';
+            eventText.textContent = existingEvent.title;
+            document.getElementById('deleteButton').onclick = function() {
+                deleteEvent(date);
+            };
+        } else {
+            newEventModal.style.display = 'block';
+            eventTitleInput.value = '';
+            document.getElementById('saveButton').onclick = function() {
+                saveEvent(date, eventTitleInput.value);
+            };
+        }
+
+        document.getElementById('closeButton').onclick = closeModal;
+        document.getElementById('cancelButton').onclick = closeModal;
+    }
+
+    function closeModal() {
+        document.getElementById('newEventModal').style.display = 'none';
+        document.getElementById('deleteEventModal').style.display = 'none';
+        document.getElementById('modalBackDrop').style.display = 'none';
+    }
+
+    function saveEvent(date, title) {
+        if (title.trim() === '') {
+            alert('O título do evento não pode estar vazio.');
+            return;
+        }
+        events.push({ date, title });
+        localStorage.setItem('events', JSON.stringify(events));
+        renderCalendar(currentYear, currentMonth);
+        closeModal();
+    }
+
+    function deleteEvent(date) {
+        events = events.filter(event => event.date !== date);
+        localStorage.setItem('events', JSON.stringify(events));
+        renderCalendar(currentYear, currentMonth);
+        closeModal();
+    }
+
     prevMonthButton.addEventListener('click', () => {
-        if (currentMonth === 0) {
+        currentMonth--;
+        if (currentMonth < 0) {
             currentMonth = 11;
             currentYear--;
-        } else {
-            currentMonth--;
         }
         renderCalendar(currentYear, currentMonth);
     });
 
     nextMonthButton.addEventListener('click', () => {
-        if (currentMonth === 11) {
+        currentMonth++;
+        if (currentMonth > 11) {
             currentMonth = 0;
             currentYear++;
-        } else {
-            currentMonth++;
         }
         renderCalendar(currentYear, currentMonth);
     });
 
-    // Renderiza o calendário atual ao carregar a página
     renderCalendar(currentYear, currentMonth);
 });

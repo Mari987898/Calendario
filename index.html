@@ -3,31 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendário</title>
-    <link rel="stylesheet" href="./styles.css">
+    <title>Calendário Interativo</title>
+    <link href="./styles.css" rel="stylesheet">
 </head>
 <body>
-    <div class="background">
-        <div class="blurred-box">
-            <div class="calendar">
-                <div class="header">
-                    <button id="prevMonth" class="button">◀</button>
-                    <h2 id="monthYear"></h2>
-                    <button id="nextMonth" class="button">▶</button>
-                </div>
-                <div id="daysOfWeek" class="days-of-week"></div>
-                <div id="days" class="days"></div>
-            </div>
+    <div class="calendar-container">
+        <div class="header">
+            <button id="prevMonth" class="button">◀</button>
+            <h2 id="monthYear"></h2>
+            <button id="nextMonth" class="button">▶</button>
         </div>
+        <div id="daysOfWeek" class="days-of-week"></div>
+        <div id="days" class="days"></div>
     </div>
-    <div id="newEventModal">
+
+    <div id="newEventModal" class="modal">
         <h2>Novo Evento</h2>
-        <input id="eventTitleInput" placeholder="Event Title"/>
+        <input id="eventTitleInput" placeholder="Título do Evento">
         <button id="saveButton">Salvar</button>
         <button id="cancelButton">Cancelar</button>
     </div>
 
-    <div id="deleteEventModal">
+    <div id="deleteEventModal" class="modal">
         <h2>Evento</h2>
         <div id="eventText"></div><br>
         <button id="deleteButton">Deletar</button>

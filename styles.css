@@ -1,3 +1,18 @@
+/* Variáveis de estilo */
+html {
+    --body-color: #FFFCFF;
+    --header-color: #d36c6c;
+    --header-button: #92a1d1;
+    --color-weekdays: #247BA0;
+    --box-shadow: #CBD4C2;
+    --hover: #e8faed;
+    --current-day: #e8f4fa;
+    --event-color: #58bae4;
+    --modal-event: #e8f4fa;
+    --color-day: white;
+}
+
+/* Estilo geral do corpo */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -9,10 +24,19 @@ body {
     transition: background-color 5s ease; /* Transição suave para mudança de cor */
 }
 
-#content {
-    text-align: center;
+/* Estilo do botão */
+button {
+    width: 75px;
+    cursor: pointer;
+    box-shadow: 0px 0px 2px gray;
+    border: none;
+    outline: none;
+    padding: 5px;
+    border-radius: 5px;
+    color: white;
 }
 
+/* Caixa desfocada */
 .blurred-box {
     width: 1000px;
     height: 850px;
@@ -27,14 +51,14 @@ body {
     transition: background-color 0.5s ease; /* Transição suave para a mudança de cor */
 }
 
-/* Estilo do Calendário */
-
-
+/* Estilo do calendário header */
 .header {
+    padding: 10px;
+    color: var(--header-color) ;
+    font-size: 26px;
+    font-family: sans-serif;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 10px;
 }
 
 .header h2 {
@@ -56,14 +80,6 @@ body {
     padding: 5px 0;
 }
 
-.day {
-    padding: 45px;
-    box-sizing: border-box;
-    font-weight: bold; /* Torna o texto dos dias em negrito */
-    font-size: 1.2em; /* Ajusta o tamanho da fonte se necessário */
-}
-
-
 .days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -72,15 +88,28 @@ body {
 }
 
 .day {
-    padding: 45px;
-    box-sizing: border-box;    
-}
-#calendar {
-    width: 100%;
-    margin: auto;
+    width: 100px;
+    padding: 10px;
+    height: 100px;
+    cursor: pointer;
+    box-sizing: border-box;
+    background-color: var(--color-day);
+    margin: 5px;
+    box-shadow: 0px 0px 3px var(--box-shadow);
     display: flex;
-    flex-wrap: wrap;
-  }
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 15%;
+}
+
+.day:hover {
+    background-color: var(--hover);
+}
+
+#currentDay {
+    background-color: var(--current-day);
+}
+
 .event {
     font-size: 10px;
     padding: 3px;
@@ -89,13 +118,10 @@ body {
     border-radius: 5px;
     max-height: 55px;
     overflow: hidden;
-  }
-  .padding {
-    cursor: default !important;
-    background-color: var(--body-color) !important;
-    box-shadow: none !important;
-  }
-  #newEventModal, #deleteEventModal {
+}
+
+/* Estilo do modal de evento */
+#newEventModal, #deleteEventModal {
     display: none;
     z-index: 20;
     padding: 25px;
@@ -107,8 +133,9 @@ body {
     left: calc(50% - 175px);
     position: absolute;
     font-family: sans-serif;
-  }
-  #eventTitleInput {
+}
+
+#eventTitleInput {
     padding: 10px;
     width: 100%;
     box-sizing: border-box;
@@ -117,20 +144,25 @@ body {
     outline: none;
     border: none;
     box-shadow: 0px 0px 3px gray;
-  }
-  #eventTitleInput.error {
-    border: 2px solid red;
-  }
-  #cancelButton, #deleteButton {
+}
+
+#eventTitleInput.error {
+    border: 2px solid black;
+}
+
+#cancelButton, #deleteButton {
     background-color: var(--header-color);
-  }
-  #saveButton, #closeButton {
+}
+
+#saveButton, #closeButton {
     background-color: var(--header-button);
-  }
-  #eventText {
+}
+
+#eventText {
     font-size: 14px;
-  }
-  #modalBackDrop {
+}
+
+#modalBackDrop {
     display: none;
     top: 0px;
     left: 0px;
@@ -138,7 +170,5 @@ body {
     width: 100vw;
     height: 100vh;
     position: absolute;
-    background-color: rgba(0,0,0,0.8);
-  }
-  
-  
+    background-color: rgba(0, 0, 0, 0.8);
+}
